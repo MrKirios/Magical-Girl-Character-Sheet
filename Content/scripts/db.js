@@ -96,18 +96,38 @@ const DB = (() => {
         await addItem(item, table);
     }
   }
+    
+  async function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
 
   async function saveDB(){
     const backup = {};
 
     for (const table of Object.values(DB.TABLES)) {
-      backup[table] = await DB.getAllItems(table);
+      if (table === "Imgs") {
+        backup[table] = [];
+        const items = await DB.getAllItems(table);
+        for (const item of items) {
+          if (item.file instanceof Blob) {
+            item.file = await blobToBase64(item.file);
+          }
+          backup[table].push(item);
+        }
+      } else {
+        backup[table] = await DB.getAllItems(table);
+      }
     }
-
+    
     const blob = new Blob([JSON.stringify(backup, null, 2)], {
       type: "application/json"
     });
-
+    
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -118,6 +138,18 @@ const DB = (() => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  function base64ToBlob(base64) {
+    const arr = base64.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
   }
 
   async function loadDB (){
@@ -148,6 +180,10 @@ const DB = (() => {
         if (!DB.TABLES || !Object.values(DB.TABLES).includes(table)) continue;
 
         for (const item of items) {
+          if (typeof item.file === "string" && item.file.startsWith("data:")) {
+            item.file = base64ToBlob(item.file);
+          }
+          
           await DB.addItem(item, table);
         }
       }
