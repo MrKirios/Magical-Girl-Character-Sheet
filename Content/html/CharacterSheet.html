@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Magical Girl - Character Sheet</title>
+    <link rel="icon" type="image/png" href="../Icons/Heartgem.ico" />
+    <link rel="stylesheet" href="../css/main.css" />
+</head>
+<body class="background" style="overflow-x: hidden;">
+  <div class="main-sheet">
+    <span onclick="Save()" class="menu-button save" title="Save sheet to file">⌄</span>
+    <span onclick="Load()" class="menu-button load" title="Load sheet from file">⌃</span>
+    <div class="header">
+      <div class="magical-grid" style="gap: 5px;">
+        <div class="magical-row">
+          <div class="magical-input">
+            <label for="character-name">Nombre:</label>
+            <input title="name" type="text" id="character-name" />
+          </div>
+
+          <div class="magical-input">
+            <label for="character-class">Clase:</label>
+            <input title="class" type="text" id="character-class" />
+          </div>
+
+          <div class="magical-icon">
+            <img id="role-icon" onclick="changeRole()" src="../Images/NoRole.png" alt="-" title="Sin Especialización" />
+          </div>
+        </div>
+
+        <div class="magical-row">
+          <div class="magical-input" style="flex: 0.65;">
+            <label for="level">Nivel:</label>
+            <input title="level" style="width: 65%;" type="text" id="character-level" />
+          </div>
+
+          <div class="magical-input">
+            <label>HP:</label>
+            <input title="hp" id="character-hp-current" type="text" style="width: 60%;" placeholder="Current" />
+            <span>|</span>
+            <input title="hp" id="character-hp-max" type="text" style="width: 60%;" placeholder="Max" />
+          </div>
+
+          <div class="magical-input">
+            <label id="labelRecurso" class="editable-label" onclick="editLabel('labelRecurso')">Recurso:</label>
+            <input title="resource" id="character-resource-current" type="text" style="width: 60%;" placeholder="Current"/>
+            <span>|</span>
+            <input title="resource" id="character-resource-max" type="text" style="width: 60%;" placeholder="Max" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; margin-top: 15px;">
+      <!-- Column 1: Inventory -->
+      <div style="flex: 0.6; padding-right: 15px;" >
+        <!-- Inventory -->
+        <div class="magical-grid">
+          <table>
+            <tr>
+                <!-- Equipables -->
+              <td>
+                <div style="width: fit-content;">
+                  <div class="Frame">
+                    <img id="Head-slot-img" onclick="openModal('Head')" src="../Icons/Inventario/Head-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Shoulder-slot-img" onclick="openModal('Shoulder')" src="../Icons/Inventario/Shoulder-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Cloak-slot-img" onclick="openModal('Cloak')" src="../Icons/Inventario/Cloak-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Torso-slot-img" onclick="openModal('Torso')" src="../Icons/Inventario/Torso-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Legs-slot-img" onclick="openModal('Legs')" src="../Icons/Inventario/Legs-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Shoes-slot-img" onclick="openModal('Shoes')" src="../Icons/Inventario/Shoes-Slot.png" class="Inner-Frame" />
+                  </div>
+                </div>
+              </td>
+
+              <!-- Main Photo -->
+              <td>
+                <div>
+                  <img title="¡Transformación!" class="Floating-Button" onclick="Transformacion()" src="../Images/Transformation_Button_245x245.png" />
+                </div>
+                <div style="width: fit-content;">
+                  <div class="Photo-Frame">
+                    <img id="Magic-Girl-Photo" title="Una Chica Normal" src="../../Outfit - Normal.png" class="Photo"/> 
+                  </div>
+                </div>
+              </td>
+
+              <!-- Mochilas/Armas -->
+              <td>
+                <div style="width: fit-content;">
+                  <div class="Frame">
+                    <img id="Shadow-slot-img" onclick="openModal('Shadow')" src="../Icons/Inventario/Shadow-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Bag1-slot-img" onclick="openModal('Bag1')" src="../Icons/Inventario/Bag1-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Bag2-slot-img" onclick="openModal('Bag2')" src="../Icons/Inventario/Bag2-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Bag3-slot-img" onclick="openModal('Bag3')" src="../Icons/Inventario/Bag3-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Hand1-slot-img" onclick="openModal('Hand1')" src="../Icons/Inventario/Hand1-Slot.png" class="Inner-Frame" />
+                  </div>
+                  <div class="Frame">
+                    <img id="Hand2-slot-img" onclick="openModal('Hand2')" src="../Icons/Inventario/Hand2-Slot.png" class="Inner-Frame" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Actions -->
+        <div class="magical-grid"  style="margin-top: 15px">
+          <div style="flex: 1;">
+            <div class="sheet-title">
+              <label onclick="clearAcciones()" style="cursor:pointer;">Acciones</label>
+              <input type="checkbox" id="check-acciones" title="¡Preparar acciones!">
+            </div>
+          </div>
+          <div style="flex: 1; display: flex;">
+            <table style="width: 100%; table-layout: fixed;">
+              <tr>
+                <td style="width: 50%;">
+                  <div id="action-a-div" onclick="action_OnClick('action-a')" class="feat-full">
+                    <label id="action-a-label" style="width: 100%;">Acción</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-b-div" onclick="action_OnClick('action-b')" class="feat-full">
+                    <label id="action-b-label" style="width: 100%;">Reacción</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-c-div" onclick="action_OnClick('action-c')" class="feat-full">
+                    <label id="action-c-label" style="width: 100%;">Movimiento</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-d-div" onclick="action_OnClick('action-d')" class="feat-full">
+                    <label id="action-d-label" style="width: 100%;">Canalización</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="action-e-div" onclick="action_OnClick('action-e')" class="feat-empty">
+                    <label id="action-e-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-f-div" onclick="action_OnClick('action-f')" class="feat-empty">
+                    <label id="action-f-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-g-div" onclick="action_OnClick('action-g')" class="feat-empty">
+                    <label id="action-g-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-h-div" onclick="action_OnClick('action-h')" class="feat-empty">
+                    <label id="action-h-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="action-j-div" onclick="action_OnClick('action-j')" class="feat-empty">
+                    <label id="action-j-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-k-div" onclick="action_OnClick('action-k')" class="feat-empty">
+                    <label id="action-k-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-l-div" onclick="action_OnClick('action-l')" class="feat-empty">
+                    <label id="action-l-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="action-m-div" onclick="action_OnClick('action-m')" class="feat-empty">
+                    <label id="action-m-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Skills -->
+        <div class="magical-grid" style="margin-top: 15px;">
+          <div class="carousel carousel-skills">
+            <div class="carousel-track carousel-skills">
+              <div class="carousel-item carousel-skills">
+                <table class="skills-table">
+                  <thead>
+                    <tr>
+                      <th>Habilidad</th>
+                      <th>Coste</th>
+                      <th style="width: 60%;">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" id="skill-a-name" title="skill-a" /></td>
+                      <td><input type="text" id="skill-a-cost" title="skill-a" /></td>
+                      <td><input type="text" id="skill-a-desc" title="skill-a" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-b-name" title="skill-b" /></td>
+                      <td><input type="text" id="skill-b-cost" title="skill-b" /></td>
+                      <td><input type="text" id="skill-b-desc" title="skill-b" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-c-name" title="skill-c" /></td>
+                      <td><input type="text" id="skill-c-cost" title="skill-c" /></td>
+                      <td><input type="text" id="skill-c-desc" title="skill-c" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-d-name" title="skill-d" /></td>
+                      <td><input type="text" id="skill-d-cost" title="skill-d" /></td>
+                      <td><input type="text" id="skill-d-desc" title="skill-d" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-e-name" title="skill-e" /></td>
+                      <td><input type="text" id="skill-e-cost" title="skill-e" /></td>
+                      <td><input type="text" id="skill-e-desc" title="skill-e" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-f-name" title="skill-f" /></td>
+                      <td><input type="text" id="skill-f-cost" title="skill-f" /></td>
+                      <td><input type="text" id="skill-f-desc" title="skill-f" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-g-name" title="skill-g" /></td>
+                      <td><input type="text" id="skill-g-cost" title="skill-g" /></td>
+                      <td><input type="text" id="skill-g-desc" title="skill-g" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="carousel-item carousel-skills">
+                <table class="skills-table">
+                  <thead>
+                    <tr>
+                      <th>Habilidad</th>
+                      <th>Coste</th>
+                      <th style="width: 60%;">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" id="skill-h-name" title="skill-h" /></td>
+                      <td><input type="text" id="skill-h-cost" title="skill-h" /></td>
+                      <td><input type="text" id="skill-h-desc" title="skill-h" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-i-name" title="skill-i" /></td>
+                      <td><input type="text" id="skill-i-cost" title="skill-i" /></td>
+                      <td><input type="text" id="skill-i-desc" title="skill-i" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-j-name" title="skill-j" /></td>
+                      <td><input type="text" id="skill-j-cost" title="skill-j" /></td>
+                      <td><input type="text" id="skill-j-desc" title="skill-j" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-k-name" title="skill-k" /></td>
+                      <td><input type="text" id="skill-k-cost" title="skill-k" /></td>
+                      <td><input type="text" id="skill-k-desc" title="skill-k" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-l-name" title="skill-l" /></td>
+                      <td><input type="text" id="skill-l-cost" title="skill-l" /></td>
+                      <td><input type="text" id="skill-l-desc" title="skill-l" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-m-name" title="skill-m" /></td>
+                      <td><input type="text" id="skill-m-cost" title="skill-m" /></td>
+                      <td><input type="text" id="skill-m-desc" title="skill-m" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-n-name" title="skill-n" /></td>
+                      <td><input type="text" id="skill-n-cost" title="skill-n" /></td>
+                      <td><input type="text" id="skill-n-desc" title="skill-n" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="carousel-item carousel-skills">
+                <table class="skills-table">
+                  <thead>
+                    <tr>
+                      <th>Habilidad</th>
+                      <th>Coste</th>
+                      <th style="width: 60%;">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="text" id="skill-o-name" title="skill-o" /></td>
+                      <td><input type="text" id="skill-o-cost" title="skill-o" /></td>
+                      <td><input type="text" id="skill-o-desc" title="skill-o" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-p-name" title="skill-p" /></td>
+                      <td><input type="text" id="skill-p-cost" title="skill-p" /></td>
+                      <td><input type="text" id="skill-p-desc" title="skill-p" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-q-name" title="skill-q" /></td>
+                      <td><input type="text" id="skill-q-cost" title="skill-q" /></td>
+                      <td><input type="text" id="skill-q-desc" title="skill-q" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-r-name" title="skill-r" /></td>
+                      <td><input type="text" id="skill-r-cost" title="skill-r" /></td>
+                      <td><input type="text" id="skill-r-desc" title="skill-r" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-s-name" title="skill-s" /></td>
+                      <td><input type="text" id="skill-s-cost" title="skill-s" /></td>
+                      <td><input type="text" id="skill-s-desc" title="skill-s" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-t-name" title="skill-t" /></td>
+                      <td><input type="text" id="skill-t-cost" title="skill-t" /></td>
+                      <td><input type="text" id="skill-t-desc" title="skill-t" /></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="skill-u-name" title="skill-u" /></td>
+                      <td><input type="text" id="skill-u-cost" title="skill-u" /></td>
+                      <td><input type="text" id="skill-u-desc" title="skill-u" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <button class="carousel-btn prev carousel-skills">❮</button>
+            <label class="carousel-page carousel-skills">1</label>
+            <button class="carousel-btn next carousel-skills">❯</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Column 2: Stats, Feats, Bags -->
+      <div style="flex: 0.4;" >
+        <!-- Stats -->
+        <div class="magical-grid">
+          <div class="carousel carousel-stats">
+            <div class="carousel-track carousel-stats">
+              <div class="carousel-item carousel-stats">
+                <table class="stats-table">
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th>Mod</th>
+                      <th>Dice</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Fuerza</td>
+                      <td><input type="text" id="character-fue-mod" title="fue" /></td>
+                      <td><input type="text" id="character-fue-die" title="fue"  /></td>
+                    </tr>
+                    <tr>
+                      <td>Agilidad</td>
+                      <td><input type="text" id="character-agi-mod" title="agi" /></td>
+                      <td><input type="text" id="character-agi-die" title="agi" /></td>
+                    </tr>
+                    <tr>
+                      <td>Inteligencia</td>
+                      <td><input type="text" id="character-int-mod" title="int" /></td>
+                      <td><input type="text"  id="character-int-die" title="int"  /></td>
+                    </tr>
+                    <tr>
+                      <td>Conocimiento</td>
+                      <td><input type="text" id="character-con-mod" title="con" /></td>
+                      <td><input type="text"  id="character-con-die" title="con"  /></td>
+                    </tr>
+                    <tr>
+                      <td>Carisma</td>
+                      <td><input type="text" id="character-car-mod" title="car" /></td>
+                      <td><input type="text"  id="character-car-die" title="car"  /></td>
+                    </tr>
+                    <tr>
+                      <td>Espíritu</td>
+                      <td><input type="text" id="character-esp-mod" title="esp" /></td>
+                      <td><input type="text"  id="character-esp-die" title="esp"  /></td>
+                    </tr>
+                    <tr>
+                      <td>Aguante</td>
+                      <td><input type="text" id="character-agu-mod" title="agu" /></td>
+                      <td><input type="text"  id="character-agu-die" title="agu"  /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="carousel-item carousel-stats">
+                <table class="stats-table defensive-table">
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Resistencia Física</td>
+                      <td><input type="text" id="character-resf" title="resf" /></td>
+                    </tr>
+                    <tr>
+                      <td>Resistencia Mágica</td>
+                      <td><input type="text" id="character-resm" title="resm" /></td>
+                    </tr>
+                    <tr>
+                      <td>Valor de Bloqueo</td>
+                      <td><input type="text" id="character-vblo" title="vblo" /></td>
+                    </tr>
+                      <td>% de Bloqueo</td>
+                      <td><input type="text" id="character-pblo" title="pblo" /></td>
+                    </tr>
+                    <tr>
+                      <td>% de Esquiva</td>
+                      <td><input type="text" id="character-esq" title="esq" /></td>
+                    </tr>
+                    <tr>
+                      <td>% de Parry</td>
+                      <td><input type="text" id="character-par" title="par" /></td>
+                    </tr>
+                    <tr>
+                      <td>% de Reflect</td>
+                      <td><input type="text" id="character-ref" title="ref" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="carousel-item carousel-stats" style="height: fit-content; align-self: center;">
+                <img id="Gem" class="gema" onclick="gemBreak()" src="../Images/Gema 5.png">
+                <label id="Gem-Text">Mira, ¡eres tú!</label>
+              </div>
+            </div>
+            <button class="carousel-btn next carousel-stats">❯</button>
+          </div>
+        </div>
+
+        <!-- Feats -->
+        <div class="magical-grid" style="margin-top: 15px">
+          <div style="flex: 1;">
+            <div class="sheet-title">Rasgos</div>
+          </div>
+          <div style="flex: 1; display: flex;">
+            <table style="width: 100%; table-layout: fixed;">
+              <tr>
+                <td style="width: 50%;">
+                  <div id="feat-a-div" onclick="featFill('feat-a')" class="feat-empty">
+                    <label id="feat-a-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="feat-b-div" onclick="featFill('feat-b')" class="feat-empty">
+                    <label id="feat-b-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="feat-c-div" onclick="featFill('feat-c')" class="feat-empty">
+                    <label id="feat-c-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="feat-d-div" onclick="featFill('feat-d')" class="feat-empty">
+                    <label id="feat-d-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="feat-e-div" onclick="featFill('feat-e')" class="feat-empty">
+                    <label id="feat-e-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="feat-f-div" onclick="featFill('feat-f')" class="feat-empty">
+                    <label id="feat-f-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="feat-g-div" onclick="featFill('feat-g')" class="feat-empty">
+                    <label id="feat-g-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="feat-h-div" onclick="featFill('feat-h')" class="feat-empty">
+                    <label id="feat-h-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">
+                  <div id="feat-i-div" onclick="featFill('feat-i')" class="feat-empty">
+                    <label id="feat-i-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+                <td style="width: 50%;">
+                  <div id="feat-j-div" onclick="featFill('feat-j')" class="feat-empty">
+                    <label id="feat-j-label" style="width: 100%;">- - - ⨁ - - -</label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="carousel carousel-eras" style="border-top: 1px solid var(--color-border); margin: 11px 0px 5px 0px;">
+            <div class="carousel-track carousel-eras">
+              <div class="carousel-item carousel-eras">
+                <label for="character-cron">Cron:</label>
+                <input title="cron" type="text" id="character-cron" />
+              </div>
+              <div class="carousel-item carousel-eras">
+                <label for="character-eras">Eras:</label>
+                <input title="eras" type="text" id="character-eras" />
+              </div>
+              <div class="carousel-item carousel-eras">
+                <label for="character-eons">Eons:</label>
+                <input title="eons" type="text" id="character-eons" />
+              </div>
+            </div>
+            <button class="carousel-btn prev carousel-eras">❮</button>
+            <button class="carousel-btn next carousel-eras">❯</button>
+          </div>
+        </div>
+
+        <!-- Notes / Others -->
+        <div class="magical-grid" style="margin-top: 15px">
+          <div class="magical-notes-div">
+            <textarea id="character-notes" title="notes" class="magical-notes-text" placeholder="Notes, buffs, aflictions..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modals -->
+  <div id="item-modal" class="modal">
+    <div class="modal-content">
+      <span onclick="closeModal('Head')" class="menu-button close">&times;</span>
+      <div class="magical-grid" style="padding-bottom: 0px;">
+        <table>
+          <tbody>
+            <tr>
+              <!-- Item Stats -->
+              <td style="width: 60%;">
+                <div style="width: 100%;">
+                  <div style="width: 100%; text-align: center; margin-bottom: 15px;">
+                    <label id="item-label" onclick="editLabel('item-label')" class="sheet-title editable-label" style="width: 100%;"></label>
+                  </div>
+                  <div style="width: 100%; display: flex;">
+                    <div style="width: 40%; text-align: center; margin-right: 15px;">
+                      <div style="width: 100%; margin-bottom: 15px;">
+                        <label id="item-slot-label" class="sheet-title" style="font-size: 1.4rem;"></label>
+                      </div>
+                      <textarea id="item-stats" title="item" class="magical-notes-text" style="height: 200px" placeholder="Estadísticas del ítem."></textarea>
+                    </div>
+                    <div style="width: 60%;">
+                      <div class="Frame" style="width: 256px; height: 256px;">
+                        <span onclick="clearImgItem()" class="menu-button clear">&times;</span>
+                        <img id="item-img" onclick="inputImg()" src="" class="Inner-Frame"  style="width: 250px; height: 250px;"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Item Skills -->
+              <td style="width: 40%; padding-left: 15px;">
+                <div style="width: 100%;">
+                  <textarea id="item-desc" title="item" class="magical-notes-text" style="height: 320px;" placeholder="Requisitos:
+  -Nivel 6.
+  -Clase Manatouched.
+  -Especialidad DPS.
+
+Durabilidad: 3 días.
+
+Habilidades:
+  -Mana Syphon [Pasiva]: [Efecto].
+
+Texto de ambientación."></textarea>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+  <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+  <script src="../scripts/main.js"></script>
+  <script src="../scripts/db.js"></script>
+</body>
+</html>

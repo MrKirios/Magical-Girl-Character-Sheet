@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+VA:wght@100..400&display=swap');
+
+:root {
+  --color-bg: #f4d9d9;
+  --color-gradient-from: #fff0f0;
+  --color-gradient-to: #ffeaea;
+  --color-border: #ffcccc;
+  --color-highlight: #ff9b9b;
+  --color-label: #b75555;
+  --color-text: #5a0000;
+  --color-glow: rgba(255, 180, 180, 1);
+  --color-panel: rgba(255, 240, 240, 1);
+  --color-panel-dark: rgba(255, 230, 230, 1);
+  --color-table-panel-light: #f4eafc;
+  --color-table-panel-dark: #ead4f3;
+  --color-gray: #c4c4c4;
+  --color-frame-light: #ffe0e0;
+  --color-frame-dark: #e6b3b3;
+  --color-frame: #ffcccc;
+
+  --text-font: 'Playwrite DE VA', cursive;
+}
