@@ -246,27 +246,27 @@ function changeRole() {
 
   switch(icon.title){
     case "Sin Especialización":
-      icon.src = "../Images/TankRole.png";
+      icon.src = "./Content/Images/TankRole.png";
       icon.title = "Tanque"
       break;
     case "Tanque":
-      icon.src = "../Images/DPSRole.png";
+      icon.src = "./Content/Images/DPSRole.png";
       icon.title = "DPS"
       break;
     case "DPS":
-      icon.src = "../Images/HealerRole.png";
+      icon.src = "./Content/Images/HealerRole.png";
       icon.title = "Soporte"
       break;
     case "Soporte":
-      icon.src = "../Images/UtilityRole.png";
+      icon.src = "./Content/Images/UtilityRole.png";
       icon.title = "Utilidad"
       break;
     case "Utilidad":
-      icon.src = "../Images/NoRole.png";
+      icon.src = "./Content/Images/NoRole.png";
       icon.title = "Sin Especialización"
       break;
     default:
-      icon.src = "../Images/TankRole.png";
+      icon.src = "./Content/Images/TankRole.png";
       icon.title = "Tanque"
   }
 
@@ -374,10 +374,10 @@ function Transformacion() {
     shine.remove();
     if (img.title == "Una Chica Normal") {
       img.title = "¡Chica Mágica!";
-      img.src = "../../Outfit - Magical.png";
+      img.src = "./Outfit - Magical.png";
     } else {
       img.title = "Una Chica Normal";
-      img.src = "../../Outfit - Normal.png";
+      img.src = "./Outfit - Normal.png";
     }
     
     DB.addOrUpdateItem({id: "outfit", img: img.src, title: img.title}, DB.TABLES.STATS);
@@ -417,7 +417,7 @@ function gemBreak() {
   img.style.opacity = 0;
 
   setTimeout(() => {
-    img.src = "../Images/Gema " + gemCounter + ".png"
+    img.src = "./Content/Images/Gema " + gemCounter + ".png"
     img.style.opacity = 1;
     
     DB.addOrUpdateItem({id: "gem", img: img.src, title: text.innerHTML, counter: gemCounter}, DB.TABLES.STATS);
@@ -444,16 +444,16 @@ async function openModal(name) {
       itemImg.src = blobUrl;
       fichaImg.src = blobUrl;
     } catch {
-      itemImg.src = "../Icons/Inventario/" + name + "-Slot.png";
-      fichaImg.src = "../Icons/Inventario/" + name + "-Slot.png";
+      itemImg.src = "./Content/Icons/Inventario/" + name + "-Slot.png";
+      fichaImg.src = "./Content/Icons/Inventario/" + name + "-Slot.png";
     }
     
     itemLabel.textContent = item.name;
     itemStats.value = item.stats;
     itemDesc.value = item.desc;
   } else {
-    itemImg.src = "../Icons/Inventario/" + name + "-Slot.png";
-    fichaImg.src = "../Icons/Inventario/" + name + "-Slot.png";
+    itemImg.src = "./Content/Icons/Inventario/" + name + "-Slot.png";
+    fichaImg.src = "./Content/Icons/Inventario/" + name + "-Slot.png";
     itemLabel.textContent = "Desocupado";
     itemStats.value = "";
     itemDesc.value = "";
@@ -497,8 +497,8 @@ function clearImgItem() {
 
   DB.deleteItem(modalItem, DB.TABLES.IMAGES);
 
-  itemImg.src = "../Icons/Inventario/" + modalItem + "-Slot.png";
-  fichaImg.src = "../Icons/Inventario/" + modalItem + "-Slot.png";
+  itemImg.src = "./Content/Icons/Inventario/" + modalItem + "-Slot.png";
+  fichaImg.src = "./Content/Icons/Inventario/" + modalItem + "-Slot.png";
 }
 
 function inputImg() {
