@@ -8,6 +8,7 @@
 </head>
 <body class="background" style="overflow-x: hidden;">
   <div class="main-sheet">
+    <span onclick="Clear()" class="menu-button clear-sheet" title="Clear all data">&times;</span>
     <span onclick="Save()" class="menu-button save" title="Save sheet to file">⌄</span>
     <span onclick="Load()" class="menu-button load" title="Load sheet from file">⌃</span>
     <div class="header">
@@ -89,7 +90,7 @@
                 </div>
                 <div style="width: fit-content;">
                   <div class="Photo-Frame">
-                    <img id="Magic-Girl-Photo" title="Una Chica Normal" src="./Outfit - Normal.png" class="Photo"/> 
+                    <img id="Magic-Girl-Photo" onclick="inputImg('main-photo')" title="Una Chica Normal" src="./Outfit - Normal.png" class="Photo"/> 
                   </div>
                 </div>
               </td>
@@ -584,7 +585,7 @@
                     <div style="width: 60%;">
                       <div class="Frame" style="width: 256px; height: 256px;">
                         <span onclick="clearImgItem()" class="menu-button clear">&times;</span>
-                        <img id="item-img" onclick="inputImg()" src="" class="Inner-Frame"  style="width: 250px; height: 250px;"/>
+                        <img id="item-img" onclick="inputImg('item-modal')" src="" class="Inner-Frame"  style="width: 250px; height: 250px;"/>
                       </div>
                     </div>
                   </div>
@@ -616,7 +617,7 @@ Texto de ambientación."></textarea>
 
 
 
-  <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+  <input type="file" id="fileInput" title="" accept="image/*" style="display: none;" />
   <script src="./Content/scripts/main.js"></script>
   <script src="./Content/scripts/db.js"></script>
 </body>

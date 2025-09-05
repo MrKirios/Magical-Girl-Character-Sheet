@@ -102,8 +102,27 @@ async function loadImgStat(name){
     switch (name) {
       case "outfit":
           var img = document.getElementById("Magic-Girl-Photo");
-          img.src = response.img;
           img.title = response.title;
+
+          if (response.title == "Una Chica Normal") {
+            const imgResponse = await DB.getItem("MainPhotoNormal" , DB.TABLES.IMAGES);
+            
+            if (imgResponse) {
+              var blobUrl = URL.createObjectURL(imgResponse.file);
+              img.src = blobUrl;
+            } else {
+              img.src = "./Outfit - Normal.png";
+            }
+          } else {
+            const imgResponse = await DB.getItem("MainPhotoMagical" , DB.TABLES.IMAGES);
+            
+            if (imgResponse) {
+              var blobUrl = URL.createObjectURL(imgResponse.file);
+              img.src = blobUrl;
+            } else {
+              img.src = "./Outfit - Magical.png";
+            }
+          }
         break;
       case "role":
           var img = document.getElementById("role-icon");
@@ -365,25 +384,37 @@ function action_OnClick(element) {
 
 function Transformacion() {
   const img = document.getElementById("Magic-Girl-Photo");
-
+  
   const shine = document.createElement('div');
   shine.classList.add('shine-effect');
   img.parentElement.appendChild(shine);
 
-  setTimeout(() => {
+  setTimeout(async() => {
     shine.remove();
     if (img.title == "Una Chica Normal") {
       img.title = "¡Chica Mágica!";
-      img.src = "./Outfit - Magical.png";
+      const response = await DB.getItem("MainPhotoMagical" , DB.TABLES.IMAGES);
+      
+      if (response) {
+        var blobUrl = URL.createObjectURL(response.file);
+        img.src = blobUrl;
+      } else {
+        img.src = "./Outfit - Magical.png";
+      }
     } else {
       img.title = "Una Chica Normal";
-      img.src = "./Outfit - Normal.png";
+      const response = await DB.getItem("MainPhotoNormal" , DB.TABLES.IMAGES);
+      
+      if (response) {
+        var blobUrl = URL.createObjectURL(response.file);
+        img.src = blobUrl;
+      } else {
+        img.src = "./Outfit - Normal.png";
+      }
     }
     
     DB.addOrUpdateItem({id: "outfit", img: img.src, title: img.title}, DB.TABLES.STATS);
   }, 250);
-
-
 }
 
 function gemBreak() {
@@ -501,21 +532,35 @@ function clearImgItem() {
   fichaImg.src = "./Content/Icons/Inventario/" + modalItem + "-Slot.png";
 }
 
-function inputImg() {
+function inputImg(title) {
+  fileInput.title = title;
   fileInput.click();
 }
 
 fileInput.addEventListener("change", async () => {
   const file = fileInput.files[0];
-  const itemImg = document.getElementById("item-img");
-  const fichaImg = document.getElementById(modalItem + "-slot-img");
 
+  
   if (file && file.type.startsWith("image/")) {
     const blobUrl = URL.createObjectURL(file);
-    itemImg.src = blobUrl;
-    fichaImg.src = blobUrl;
 
-    await DB.addOrUpdateItem({id: modalItem, file: file}, DB.TABLES.IMAGES);
+    if (fileInput.title == "item-modal") {
+      const itemImg = document.getElementById("item-img");
+      const fichaImg = document.getElementById(modalItem + "-slot-img");
+
+      itemImg.src = blobUrl;
+      fichaImg.src = blobUrl;
+
+      await DB.addOrUpdateItem({id: modalItem, file: file}, DB.TABLES.IMAGES);
+    } else if (fileInput.title == "main-photo") {
+      const itemImg = document.getElementById("Magic-Girl-Photo");
+      
+      itemImg.src = blobUrl;
+
+      const id = itemImg.title === "Una Chica Normal" ? "MainPhotoNormal" : "MainPhotoMagical";
+      await DB.addOrUpdateItem({id: id, file: file}, DB.TABLES.IMAGES);
+      await DB.addOrUpdateItem({id: "outfit", img: itemImg.src, title: img.title}, DB.TABLES.STATS);
+    }
   } else {
     alert("Please select an image file!");
   }
@@ -612,4 +657,13 @@ async function Save() {
 
 async function Load() {
   await DB.loadDB();
+}
+
+async function Clear() {
+  const confirmed = confirm(`Are you sure you want to clear ALL data in the character sheet?`);
+  
+  if (confirmed) {
+    await DB.clearDB();
+    location.reload();
+  }
 }
