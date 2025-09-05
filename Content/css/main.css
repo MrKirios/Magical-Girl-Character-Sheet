@@ -566,6 +566,13 @@ input[type="checkbox"]:hover {
   font-size: 1.5rem;
 }
 
+.menu-button.clear-sheet {
+  margin-top: -10 px; 
+  margin-left: 760px;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
 .menu-button.save {
   margin-top: -30px; 
   margin-left: 775px;

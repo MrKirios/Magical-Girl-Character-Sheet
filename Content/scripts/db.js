@@ -194,6 +194,31 @@ const DB = (() => {
     input.click();
   }
 
+  async function clearDB() {
+      if (!db) {
+      await openDB();
+    }
+
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(Object.values(TABLES), "readwrite");
+
+      tx.oncomplete = () => {
+        console.log("All tables cleared successfully!");
+        resolve();
+      };
+
+      tx.onerror = (event) => {
+        console.error("Error clearing database:", event);
+        reject(event);
+      };
+
+      for (const table of Object.values(TABLES)) {
+        const store = tx.objectStore(table);
+        store.clear();
+      }
+    });
+   }
+
   return {
     TABLES,
     openDB,
@@ -204,6 +229,7 @@ const DB = (() => {
     deleteItem,
     addOrUpdateItem,
     saveDB,
-    loadDB
+    loadDB,
+    clearDB
   };
 })();
